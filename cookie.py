@@ -6,6 +6,8 @@ import hashlib
 import os.path
 from tornado.options import define, options
 
+from db.tables import query_user
+
 define("port", default=8000, help="run on the given port", type=int)
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -21,12 +23,10 @@ class LoginHandler(BaseHandler):
         username = self.get_argument("username")
         password = self.get_argument("password")
         if username and password:
-            sha512 = hashlib.sha512(password.encode("utf8")).hexdigest()
-            self.set_secure_cookie("username", self.get_argument("username"))
-            self.set_secure_cookie("password", sha512)
-            self.redirect("/")
-        else:
-            self.redirect("/login.html")
+            res = query_user(username + '\3' + password)
+            if res:
+                self.redirect("/")
+        self.write("login failed!")
 
 class WelcomeHandler(BaseHandler):
     @tornado.web.authenticated

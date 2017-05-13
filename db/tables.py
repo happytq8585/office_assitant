@@ -28,12 +28,12 @@ def query_user(line):
     session = DBSession()
     name, password = line.split('\3')
     sha512 = hashlib.sha512(password.encode()).hexdigest()
-    result = session.query(User).filter(User.name==name, User.password==sha512).all()
-    for one in result:
-        print(one.id, one.name, password)
+    result = session.query(User).filter(User.name==name, User.password==sha512).count()
 
     session.close()
+    return True if result else False
 
 if __name__ == "__main__":
     line = 'root' + '\3' + '123'
-    query_user(line)
+    res = query_user(line)
+    print(res)
