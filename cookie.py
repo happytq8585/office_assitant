@@ -25,6 +25,7 @@ class LoginHandler(BaseHandler):
         if username and password:
             res = query_user(username + '\3' + password)
             if res:
+                self.set_secure_cookie("username", username)
                 self.redirect("/")
         self.write("login failed!")
 
@@ -35,9 +36,8 @@ class WelcomeHandler(BaseHandler):
 
 class LogoutHandler(BaseHandler):
     def get(self):
-        if (self.get_argument("logout", None)):
-            self.clear_cookie("username")
-            self.redirect("/")
+        self.clear_cookie("username")
+        self.redirect("/")
 
 if __name__ == "__main__":
     tornado.options.parse_command_line()
