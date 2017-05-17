@@ -1,13 +1,24 @@
 <html>
     <head>
-        <title>Please Log In</title>
+        <title>login</title>
     </head>
     <body>
-        <form action="/login" method="POST">
+    <div class="form">
+        <form id="loginForm" action="/login" method="POST">
             {% raw xsrf_form_html() %}
-            Username: <input type="text" name="username" />
-            Password: <input type="text" name="password" />
-            <input type="submit" value="Log In" />
+            <div class="inptr">
+                用户名:<input type="text" id="uid" name="username" class="inpUser inped" value="">
+                <input type="hidden" name="nodetect" value="false">
+            </div>
+            <div class="inptr">
+                密码:<input type="password" id="password" name="password" class="inpPW" autocomplete="off" value="">
+            </div>
+            <div class="inpB">
+                <div>
+                    <button name="action:login" type="submit" class="Button" id="login_button">登录</button>
+                </div>
+            </div>
         </form>
+    </div>
     </body>
 </html>

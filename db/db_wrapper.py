@@ -14,6 +14,7 @@ class User(Base):
 
 # 表的结构:
     id = Column(Integer, primary_key=True)
+    priority = Column(Integer)
     name = Column(String(20))
     password = Column(String(128))
 

@@ -13,8 +13,6 @@ define("port", default=8000, help="run on the given port", type=int)
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie("username")
-    def get_current_passwd(self):
-        return self.get_secure_cookie("password")
 
 class LoginHandler(BaseHandler):
     def get(self):
@@ -26,13 +24,14 @@ class LoginHandler(BaseHandler):
             res = query_user(username + '\3' + password)
             if res:
                 self.set_secure_cookie("username", username)
+                BaseHandler.priority = res
                 self.redirect("/")
         self.write("login failed!")
 
 class WelcomeHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        self.render('index.html', user=self.current_user)
+        self.render('index.html', user=self.current_user, priority=self.priority)
 
 class LogoutHandler(BaseHandler):
     def get(self):
@@ -40,6 +39,7 @@ class LogoutHandler(BaseHandler):
         self.redirect("/")
 
 class TestHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         self.render('test.html')
 

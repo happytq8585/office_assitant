@@ -16,11 +16,12 @@ class User(Base):
 
 # 表的结构:
     id = Column(Integer, primary_key=True)
+    priority = Column(Integer)
     name = Column(String(20))
     password = Column(String(128))
 
 # 初始化数据库连接:
-engine = create_engine('mysql+mysqlconnector://root:123@localhost:3306/test')
+engine = create_engine('mysql+mysqlconnector://root:@localhost:3306/test')
 # 创建DBSession类型:
 DBSession = sessionmaker(bind=engine)
 
@@ -28,10 +29,10 @@ def query_user(line):
     session = DBSession()
     name, password = line.split('\3')
     sha512 = hashlib.sha512(password.encode()).hexdigest()
-    result = session.query(User).filter(User.name==name, User.password==sha512).count()
-
+    result = session.query(User.priority).filter(User.name==name, User.password==sha512).one()
+  
     session.close()
-    return True if result else False
+    return result[0] if len(result) else None
 
 if __name__ == "__main__":
     line = 'root' + '\3' + '123'
