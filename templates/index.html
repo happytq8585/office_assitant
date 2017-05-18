@@ -3,11 +3,14 @@
         <title>Welcome Back!</title>
     </head>
     <body>
-        <h1>Welcome back, {{ user }}</h1>
-{% if priority > 10 %}
-        <p>县级权限</p>
-{% else %}
-        <p>市级权限</p>
-{% end %}
+        {% include "logout_base.html" %}
+    {% if priority > 50 %}
+        {% include "create_base.html" %}
+        {% include "account_base.html" %}
+        {% include "local_base.html" %}
+    {% else %}
+        {% include "account_base.html" %}
+        {% include "collect_base.html" %}
+    {% end %}
     </body>
 </html>

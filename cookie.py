@@ -24,19 +24,44 @@ class LoginHandler(BaseHandler):
             res = query_user(username + '\3' + password)
             if res:
                 self.set_secure_cookie("username", username)
-                BaseHandler.priority = res
+                self.set_secure_cookie("priority", str(res))
                 self.redirect("/")
-        self.write("login failed!")
+            else:
+                self.write("login failed!")
+        else:
+            self.write("login failed!")
 
 class WelcomeHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        self.render('index.html', user=self.current_user, priority=self.priority)
+        user = self.get_secure_cookie("username")
+        priority = self.get_secure_cookie("priority")
+        self.render('index.html', user=user, priority=int(priority))
 
 class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("username")
         self.redirect("/")
+
+class CreateHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("create.html", user = self.get_secure_cookie("username"))
+
+class AccountHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("account.html", user = self.get_secure_cookie("username"))
+
+class CollectHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("collect.html", user = self.get_secure_cookie("username"))
+
+class LocalHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("local.html", user = self.get_secure_cookie("username"))
 
 class TestHandler(BaseHandler):
     @tornado.web.authenticated
@@ -54,7 +79,11 @@ if __name__ == "__main__":
     application = tornado.web.Application([ (r'/', WelcomeHandler),
                                             (r'/login', LoginHandler),
                                             (r'/logout', LogoutHandler),
-                                            (r'/test', TestHandler)
+                                            (r'/create', CreateHandler),
+                                            (r'/account',AccountHandler),
+                                            (r'/collect',CollectHandler),
+                                            (r'/local',  LocalHandler),
+                                            (r'/test', TestHandler),
                                             ], **settings)
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)
