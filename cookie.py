@@ -24,10 +24,10 @@ class LoginHandler(BaseHandler):
             res = query_user(username + '\3' + password)
             if res:
                 self.set_secure_cookie("username", username)
-                self.set_secure_cookie("priority", str(res))
-                self.set_secure_cookie("agency_id", res[2][0])
+                self.set_secure_cookie("priority", str(res[0]))
+                self.set_secure_cookie("agency_id", str(res[2][0]))
                 self.set_secure_cookie("agency_name", res[2][1])
-                self.set_secure_cookie("branch_id", res[1][1])
+                self.set_secure_cookie("branch_id", str(res[1][0]))
                 self.set_secure_cookie("branch_name", res[1][-1])
                 self.redirect("/")
             else:
