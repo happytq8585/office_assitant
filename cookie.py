@@ -25,6 +25,10 @@ class LoginHandler(BaseHandler):
             if res:
                 self.set_secure_cookie("username", username)
                 self.set_secure_cookie("priority", str(res))
+                self.set_secure_cookie("agency_id", res[2][0])
+                self.set_secure_cookie("agency_name", res[2][1])
+                self.set_secure_cookie("branch_id", res[1][1])
+                self.set_secure_cookie("branch_name", res[1][-1])
                 self.redirect("/")
             else:
                 self.write("login failed!")
