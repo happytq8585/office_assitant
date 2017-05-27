@@ -65,17 +65,17 @@ def query_user(line):
     session = DBSession()
     name, password = line.split('\3')
     sha512 = hashlib.sha512(password.encode()).hexdigest()
-    res = session.query(User.priority, User.branch_id).filter(User.name==name, User.password==sha512).one()
-    
-    if not len(res):
+    res = session.query(User.priority, User.branch_id).filter(User.name==name, User.password==sha512).first()
+    if not res:
         return None
-    priority = res[0]
-    branch_id = res[1]
-    res = session.query(Branch).filter(Branch.id == branch_id).one()
+    
+    priority = res.priority
+    branch_id = res.branch_id
+    res = session.query(Branch).filter(Branch.id == branch_id).first()
     if not res:
         return None
     branch = [res.id, res.agency_id, res.address, res.telephone, res.priority, res.name]
-    res = session.query(Agency).filter(Agency.id == branch[1]).one()
+    res = session.query(Agency).filter(Agency.id == branch[1]).first()
     if not res:
         return None
     session.close()

@@ -4,6 +4,19 @@
 <body>
     {% include "logout_base.html" %}
     <h1>创建账户</h1>
-    <p>完善中...</p>
+    <form action="/create" method="post">
+        {% raw xsrf_form_html() %}
+        用户名: <input type="text" name="username" /><br>
+        密码:   <input type="text" name="password" /><br>
+        权限:   <select name="privileges">
+                <option value="xs1">县商业银行</option>
+                <option value="xr1">县人民银行</option>
+                <option value="ss2">市商业银行</option>
+                <option value="sr2">市人民银行</option>
+                <option value="ss3">省商业银行</option>
+                <option value="sr3">省人民银行</option>
+                </select><br>
+        <input type="button" name="submit" value="创建">
+    </form>
 </body>
 </html>
