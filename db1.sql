@@ -17,7 +17,7 @@ create table if not exists user
  telephone varchar(16) default ""
 ) engine=InnoDB default charset=utf8;
 insert into user(nick_name, real_name, telephone) values("root", "root", "17313615918");/*id=1*/
-<!--insert into user(nick_name, real_name, telephone) values("bank", "CommerceBank", "18600000001");/*id=2*/>
+/*insert into user(nick_name, real_name, telephone) values("bank", "CommerceBank", "18600000001");id=2*/
 
 /*
 权限:authority
